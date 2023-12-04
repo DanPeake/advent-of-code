@@ -1,4 +1,3 @@
-const { Console } = require('node:console');
 const fs = require('node:fs');
 
 function run() {
