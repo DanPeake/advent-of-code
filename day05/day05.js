@@ -26,6 +26,7 @@ function parseInput(input) {
 
 function problem1(data) {
     const processMap = function (mapId, seedNum, searchNum, dataId) {
+        seedDest[seedNum][dataId] = dataId;
         data[mapId].find((m) => {
             let dest = findDest(searchNum, m[1], m[2], m[0]);
             if (dest != undefined) {
@@ -36,7 +37,7 @@ function problem1(data) {
         })
     };
     const findDest = function (source, start, range, destination) {
-        let dest = source;
+        let dest = undefined;
         if (source >= start && source < (start + range)) {
             let index = source - start;
             dest = destination + index;
