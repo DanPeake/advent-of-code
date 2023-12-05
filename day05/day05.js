@@ -68,7 +68,6 @@ function problem1(data) {
         }
 
     });
-    console.log(`High enough? ${lowestLocation > 22956580}`)
     return lowestLocation;
 }
 
