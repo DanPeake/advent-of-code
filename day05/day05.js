@@ -14,7 +14,6 @@ function run() {
 
 function parseInput(input) {
     let seeds = input.slice(0, input.indexOf('\n')).split(': ')[1].split(' ').map((s) => +s);
-
     let maps = { 'seeds': seeds, mappings: [] };
     input.match(/([a-z+\-]+ map:[0-9 \n]+)/gi).forEach((s) => {
         let arr = s.split(' map:\n');
