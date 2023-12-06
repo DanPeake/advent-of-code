@@ -20,6 +20,7 @@ function parseInput(input) {
         let data = arr[1].split('\n').filter((s) => s != '');
         maps.mappings.push(arr[0]);
         maps[arr[0]] = data.map((s) => s.split(' ').map((n) => +n));
+        maps[arr[0]].forEach((mapping) => mapping[2] += mapping[1]); // Pre-calc the input range
     });
     return maps;
 }
@@ -27,7 +28,7 @@ function parseInput(input) {
 const processMap = function (data, searchNum) {
     let mappedResult = searchNum;
     data.find((m) => {
-        if (searchNum >= m[1] && searchNum < (m[1] + m[2])) {
+        if (searchNum >= m[1] && searchNum < m[2]) {
             mappedResult = m[0] + (searchNum - m[1]);
             return true;
         }
@@ -53,6 +54,7 @@ function problem1(data) {
 function problem2(data) {
     let lowestLocation = Number.MAX_SAFE_INTEGER;
     let pair = 0;
+    console.time();
     for (let i = 0; i < data.seeds.length; i += 2) {
         console.log(`Searching seed range ${++pair}...`);
         for (let seed = data.seeds[i]; seed < data.seeds[i] + data.seeds[i + 1]; seed++) {
@@ -65,6 +67,7 @@ function problem2(data) {
             }
         }
     }
+    console.timeEnd();
     return lowestLocation;
 }
 
