@@ -8,71 +8,65 @@ function run() {
         }
         const parsedInput = parseInput(data);
         console.log("Lowest location number: " + problem1(parsedInput));
-        console.log("Problem 2: " + problem2(parsedInput));
+        console.log("Lowest location number in expanded ranges: " + problem2(parsedInput));
     });
 }
 
 function parseInput(input) {
     let seeds = input.slice(0, input.indexOf('\n')).split(': ')[1].split(' ').map((s) => +s);
 
-    let maps = { 'seeds': seeds };
+    let maps = { 'seeds': seeds, mappings: [] };
     input.match(/([a-z+\-]+ map:[0-9 \n]+)/gi).forEach((s) => {
         let arr = s.split(' map:\n');
         let data = arr[1].split('\n').filter((s) => s != '');
+        maps.mappings.push(arr[0]);
         maps[arr[0]] = data.map((s) => s.split(' ').map((n) => +n));
     });
     return maps;
 }
 
-function problem1(data) {
-    const processMap = function (mapId, seedNum, searchNum, dataId) {
-        seedDest[seedNum][dataId] = dataId;
-        data[mapId].find((m) => {
-            let dest = findDest(searchNum, m[1], m[2], m[0]);
-            if (dest != undefined) {
-                seedDest[seedNum][dataId] = dest;
-                return true;
-            }
-            return false;
-        })
-    };
-    const findDest = function (source, start, range, destination) {
-        let dest = undefined;
-        if (source >= start && source < (start + range)) {
-            let index = source - start;
-            dest = destination + index;
+const processMap = function (data, searchNum) {
+    let mappedResult = searchNum;
+    data.find((m) => {
+        if (searchNum >= m[1] && searchNum < (m[1] + m[2])) {
+            mappedResult = m[0] + (searchNum - m[1]);
+            return true;
         }
-        return dest;
-    };
-    let seedDest = {};
+        return false;
+    })
+    return mappedResult;
+};
+
+function problem1(data) {
     let lowestLocation = Number.MAX_SAFE_INTEGER;
     data.seeds.forEach((seed) => {
-        seedDest[seed] = {
-            'soil': undefined,
-            'fertilizer': undefined,
-            'water': undefined,
-            'light': undefined,
-            'temperature': undefined,
-            'humidity': undefined,
-            'location': undefined
-        };
-        processMap('seed-to-soil', seed, seed, 'soil');
-        processMap('soil-to-fertilizer', seed, seedDest[seed].soil, 'fertilizer');
-        processMap('fertilizer-to-water', seed, seedDest[seed].fertilizer, 'water');
-        processMap('water-to-light', seed, seedDest[seed].water, 'light');
-        processMap('light-to-temperature', seed, seedDest[seed].light, 'temperature');
-        processMap('temperature-to-humidity', seed, seedDest[seed].temperature, 'humidity');
-        processMap('humidity-to-location', seed, seedDest[seed].humidity, 'location');
-        if (seedDest[seed].location < lowestLocation) {
-            lowestLocation = seedDest[seed].location;
+        let mapResult = seed;
+        data.mappings.forEach((mapId) => {
+            mapResult = processMap(data[mapId], mapResult);
+        })
+        if (mapResult < lowestLocation) {
+            lowestLocation = mapResult;
         }
-
     });
     return lowestLocation;
 }
 
 function problem2(data) {
-    return "None";
+    let lowestLocation = Number.MAX_SAFE_INTEGER;
+    let pair = 0;
+    for (let i = 0; i < data.seeds.length; i += 2) {
+        console.log(`Searching seed range ${++pair}...`);
+        for (let seed = data.seeds[i]; seed < data.seeds[i] + data.seeds[i + 1]; seed++) {
+            let mapResult = seed;
+            data.mappings.forEach((mapId) => {
+                mapResult = processMap(data[mapId], mapResult);
+            })
+            if (mapResult < lowestLocation) {
+                lowestLocation = mapResult;
+            }
+        }
+    }
+    return lowestLocation;
 }
 
 module.exports = { run };
