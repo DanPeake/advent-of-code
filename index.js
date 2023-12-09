@@ -3,5 +3,6 @@ const day05 = require('./day05/day05')
 const day06 = require('./day06/day06')
 const day07 = require('./day07/day07')
 const day08 = require('./day08/day08')
+const day09 = require('./day09/day09')
 
-day08.run();
+day09.run();
