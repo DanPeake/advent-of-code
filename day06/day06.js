@@ -1,11 +1,6 @@
-const fs = require('node:fs');
-
 function run() {
-    fs.readFile('day06/input.txt', 'utf8', (err, data) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
+    require('node:fs').readFile(`${__dirname.split(require('node:path').sep).pop()}/input.txt`, 'utf8', (err, data) => {
+        if (err) { console.error(err.code == 'ENOENT' ? `Could not read input file "${err.path}"` : err.code); return; }
         const parsedInput = parseInput(data);
         console.log("Number of winning holds per race multiplied together: " + problem1(parsedInput));
         console.log("Ways to win one big race: " + problem2(parsedInput));
