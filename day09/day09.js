@@ -16,7 +16,7 @@ function parseInput(input) {
     return input.split('\n')
         .filter((s) => s != '')
         .map((s) => [s.split(' ').map((n) => +n)])
-        .map((s) => { // expan the difference calculations while parsing input why not
+        .map((s) => { // expand the difference calculations while parsing input why not
             let last = 0;
             do {
                 let currData = s.slice(-1)[0];
