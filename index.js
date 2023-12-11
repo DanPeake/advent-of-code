@@ -3,4 +3,4 @@ const runDay = (num) => {
     require(`./${dayName}/${dayName}`).run();
 };
 
-runDay(9);
+runDay(11);
